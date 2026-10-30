@@ -1,0 +1,7 @@
+{
+  "source_directory": "~/storage/pictures/Screenshots",
+  "destination_directory": "~/storage/pictures/CompressedScreenshots",
+  "scale_percent": 50.0,
+  "quality": 45,
+  "format": "webp"
+}

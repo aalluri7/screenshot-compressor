@@ -13,6 +13,9 @@ env/
 # Logs and runtime data
 *.log
 
+# Local user configuration
+config.json
+
 # OS artifacts
 .DS_Store
 Thumbs.db

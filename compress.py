@@ -6,12 +6,52 @@ Lossy WebP batch compressor designed for Termux on Android.
 
 import argparse
 import datetime
+import json
 import os
 import shutil
 import subprocess
 import sys
 from pathlib import Path
 from PIL import Image
+
+DEFAULT_CONFIG = {
+    "source_directory": "~/storage/pictures/Screenshots",
+    "destination_directory": "~/storage/pictures/CompressedScreenshots",
+    "scale_percent": 50.0,
+    "quality": 45,
+    "format": "webp",
+}
+
+
+def load_or_create_config(script_dir: Path) -> dict:
+    """Load config.json, or create it from config.example.json / defaults if missing."""
+    config_file = script_dir / "config.json"
+    example_file = script_dir / "config.example.json"
+
+    if not config_file.exists():
+        if example_file.exists():
+            try:
+                shutil.copy(example_file, config_file)
+            except OSError:
+                pass
+        else:
+            try:
+                with config_file.open("w", encoding="utf-8") as f:
+                    json.dump(DEFAULT_CONFIG, f, indent=2)
+            except OSError:
+                pass
+
+    if config_file.exists():
+        try:
+            with config_file.open("r", encoding="utf-8") as f:
+                data = json.load(f)
+                merged = dict(DEFAULT_CONFIG)
+                merged.update(data)
+                return merged
+        except Exception:
+            pass
+
+    return dict(DEFAULT_CONFIG)
 
 
 def human_size(num_bytes: int) -> str:
@@ -24,6 +64,15 @@ def human_size(num_bytes: int) -> str:
 
 
 def main():
+    script_dir = Path(__file__).resolve().parent
+    config = load_or_create_config(script_dir)
+
+    default_source = Path(config.get("source_directory", "~/storage/pictures/Screenshots")).expanduser()
+    default_dest = Path(config.get("destination_directory", "~/storage/pictures/CompressedScreenshots")).expanduser()
+    default_scale = float(config.get("scale_percent", 50.0))
+    default_quality = int(config.get("quality", 45))
+    default_format = str(config.get("format", "webp"))
+
     parser = argparse.ArgumentParser(
         description="Batch compress Android screenshots into WebP for efficient archiving."
     )
@@ -31,34 +80,34 @@ def main():
         "--source",
         "-s",
         type=Path,
-        default=Path.home() / "storage/pictures/Screenshots",
-        help="Source directory containing uncompressed screenshots (default: ~/storage/pictures/Screenshots)",
+        default=default_source,
+        help=f"Source directory containing uncompressed screenshots (default: {default_source})",
     )
     parser.add_argument(
         "--dest",
         "-d",
         type=Path,
-        default=Path.home() / "storage/pictures/SmolScreenShots",
-        help="Destination directory for compressed files (default: ~/storage/pictures/SmolScreenShots)",
+        default=default_dest,
+        help=f"Destination directory for compressed files (default: {default_dest})",
     )
     parser.add_argument(
         "--scale",
         type=float,
-        default=50.0,
-        help="Scale percentage to resize image dimensions (default: 50.0)",
+        default=default_scale,
+        help=f"Scale percentage to resize image dimensions (default: {default_scale})",
     )
     parser.add_argument(
         "--quality",
         "-q",
         type=int,
-        default=45,
-        help="Compression quality from 1 to 100 (default: 45)",
+        default=default_quality,
+        help=f"Compression quality from 1 to 100 (default: {default_quality})",
     )
     parser.add_argument(
         "--format",
         "-f",
-        default="webp",
-        help="Target image format extension (default: webp)",
+        default=default_format,
+        help=f"Target image format extension (default: {default_format})",
     )
     parser.add_argument(
         "--log",

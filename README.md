@@ -60,6 +60,22 @@ Make the script executable:
 chmod +x ~/code/screenshot-compressor/compress.py
 ```
 
+### Configuration
+
+Defaults can be customized in `config.json` (git-ignored for personal privacy). On first run, `compress.py` automatically initializes `config.json` from `config.example.json`:
+
+```json
+{
+  "source_directory": "~/storage/pictures/Screenshots",
+  "destination_directory": "~/storage/pictures/CompressedScreenshots",
+  "scale_percent": 50.0,
+  "quality": 45,
+  "format": "webp"
+}
+```
+
+Any CLI flag passed at runtime (`--dest`, `--scale`, etc.) will override the config file.
+
 ### Basic Run (Default Settings)
 ```bash
 python ~/code/screenshot-compressor/compress.py
