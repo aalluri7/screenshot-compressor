@@ -82,10 +82,17 @@ python ~/code/screenshot-compressor/compress.py
 ```
 
 * **Default Source:** `~/storage/pictures/Screenshots`
-* **Default Destination:** `~/storage/pictures/SmolScreenShots`
+* **Default Destination:** Configured in `config.json` (defaults to `CompressedScreenshots`)
 * **Default Scale:** `50%`
 * **Default Quality:** `45`
 * **Default Format:** `webp`
+
+> [!TIP]
+> **Android MediaStore & Directory Naming Note:**
+> Android's media scanner and Google Photos can be finicky about custom folder names under `~/storage/pictures/`:
+> * **Avoid spaces** in folder names (e.g. use `SmolScreenShots` or `CompressedScreenshots`, not `compressed screenshots`). Folders with spaces often cause Google Photos indexing delays or fail to group cleanly in the *On this device* gallery view.
+> * **Use CamelCase or capitalized names** (e.g., `SmolScreenShots`) so Android recognizes it as a distinct media collection rather than an app cache or hidden directory.
+> * Always make sure `termux-api` is installed so `termux-media-scan` automatically notifies Google Photos the moment new files are written.
 
 ### Custom Options
 ```bash
