@@ -35,14 +35,17 @@ This tool:
 
 ---
 
-## 📦 Installation & Prerequisites
+## 📦 Installation & Setup
 
-Inside Termux, install Python and Pillow:
+You can set up all dependencies automatically using the included setup script:
 
 ```bash
-pkg update && pkg upgrade -y
-pkg install -y python python-pillow git termux-api
+cd ~/code/screenshot-compressor
+chmod +x setup.sh
+./setup.sh
 ```
+
+*(The setup script detects whether you are on Termux/Android or standard Linux/macOS and installs the appropriate dependencies automatically).*
 
 Ensure storage access is granted to Termux:
 

@@ -12,7 +12,13 @@ import shutil
 import subprocess
 import sys
 from pathlib import Path
-from PIL import Image
+
+try:
+    from PIL import Image
+except ImportError:
+    print("\n[ERROR] Pillow is not installed!", file=sys.stderr)
+    print("Run './setup.sh' (or 'pkg install python-pillow' on Termux) to install it.\n", file=sys.stderr)
+    sys.exit(1)
 
 DEFAULT_CONFIG = {
     "source_directory": "~/storage/pictures/Screenshots",
