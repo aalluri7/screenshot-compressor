@@ -4,20 +4,26 @@ A lightweight, high-performance Python utility designed to batch-compress Androi
 
 ---
 
-## 🌟 What This Project Does
+## 💭 The Origin: Why I Built This
 
-Mobile screenshots on high-DPI devices like the Google Pixel 9 Pro are captured as uncompressed PNGs, frequently taking **3 MB to 8 MB+** per image. 
+I’m not a writer, and I’ve never been good at typing or keeping written journals. Instead, I record my life visually—photographing what I eat, keeping track of things I need to remember, and taking screenshots of articles, ideas, or pieces of context I feed into AI models. If I ever need to figure something out about my past, I web my way back into it through the timestamps of these images. 
 
-This tool:
-* Downscales resolution (default 50%) and converts screenshots into WebP at quality 45.
-* Drops average screenshot file sizes from **~5 MB down to ~40 KB – 80 KB** (>95% size reduction).
-* Preserves sharp, legible text and UI contrast for record-keeping and archiving.
-* Preserves ICC color profile metadata and exact original timestamps (`os.utime`).
-* Dramatically reduces Google Photos cloud storage usage and local phone storage.
+For camera photos, I used Open Camera with aggressive compression to capture sub-100 KB images that still preserved all the text and information I cared about. But I ran into a wall with phone screenshots:
+* They are captured as full uncompressed PNGs (**3 MB to 8 MB+ each**).
+* Whenever I switched phones, old screenshots weren't easily carried over.
+* Backing up raw PNGs flooded and quickly exhausted my Google Photos cloud storage quota.
+* Existing Play Store compression apps were full of ads, background battery-draining services, or subscriptions.
+
+I knew that if Open Camera could produce readable, sub-100 KB records of physical documents, digital screenshots should be able to do the same. 
+
+So I built this utility directly inside Termux on my phone using voice dictation:
+* It mirrors screenshots into a compressed folder (`SmolScreenShots`), taking them from **~5 MB down to ~40 KB – 80 KB** (>95% size reduction).
+* It preserves original timestamps (`os.utime`) so Google Photos retains the exact chronological history of my records.
+* It notifies Android's MediaStore (`termux-media-scan`) so I can set just the compressed folder to auto-backup to Google Photos without the original raw PNGs eating up cloud storage.
 
 ---
 
-## 🚀 Why It Was Built
+## 🚀 Why It Was Built (Technical Architecture)
 
 1. **Overcoming Android Background Restrictions:** Android aggressively terminates background apps and restricts battery usage. Running directly in Termux gives full user control.
 2. **Eliminating Subprocess Bottlenecks:** Unlike traditional Bash scripts that spawn hundreds of individual subprocesses (`ls`, `basename`, `date`, `touch`, `du`), this Python implementation executes completely in-memory using `os.scandir` and `Pillow`'s native C bindings.
