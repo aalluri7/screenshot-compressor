@@ -23,21 +23,11 @@ So I built this utility directly inside Termux on my phone using voice dictation
 
 ---
 
-## 🚀 Why It Was Built (Technical Architecture)
-
-1. **Overcoming Android Background Restrictions:** Android aggressively terminates background apps and restricts battery usage. Running directly in Termux gives full user control.
-2. **Eliminating Subprocess Bottlenecks:** Unlike traditional Bash scripts that spawn hundreds of individual subprocesses (`ls`, `basename`, `date`, `touch`, `du`), this Python implementation executes completely in-memory using `os.scandir` and `Pillow`'s native C bindings.
-3. **Instant $O(1)$ Duplicate Skipping:** Uses in-memory hashing to instantly skip screenshots that have already been converted without disk thrashing.
-4. **Chronological Sorting:** Processes files newest-first so recent captures are archived immediately.
-5. **Exact Timestamp Preservation:** Replicates `touch -r` so Google Photos and gallery apps display images in their true chronological order.
-
----
-
 ## 🛠 Tech Stack
 
 * **Language:** Python 3
-* **Image Processing:** [Pillow](https://python-pillow.org/) (PIL) using `LANCZOS` high-quality anti-aliasing resampling and `libwebp` encoder.
-* **Environment:** [Termux](https://termux.dev/) on Android.
+* **Image Processing:** [Pillow](https://python-pillow.org/) (PIL)
+* **Environment:** [Termux](https://termux.dev/) on Android (also runs on standard Linux/macOS)
 
 ---
 
